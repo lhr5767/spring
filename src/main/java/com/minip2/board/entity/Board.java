@@ -9,7 +9,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(exclude = "writer")
+@ToString(exclude = "writer") //writer 출력하려면 member테이블 연결이 필요하기때문에 제외함
 public class Board extends BaseEntity{
 
     @Id
@@ -20,6 +20,6 @@ public class Board extends BaseEntity{
 
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) //지연로딩
     private Member writer;
 }
