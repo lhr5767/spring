@@ -20,8 +20,8 @@ public class ReplyRepositoryTest {
 
         IntStream.rangeClosed(1,300).forEach(i-> {
 
-            //2부터 101까지 임의의 번호 (현재 db에 bno가 2부터 101까지 생성되어있음)
-            long bno = (long)(Math.random()*100) + 2;
+            //1부터 100까지 임의의 번호 (현재 db에 bno가 1부터 100까지 생성되어있음)
+            long bno = (long)(Math.random()*100) + 1;
 
             Board board = Board.builder().bno(bno).build();
 
