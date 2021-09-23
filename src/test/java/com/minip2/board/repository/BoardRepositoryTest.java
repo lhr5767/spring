@@ -100,5 +100,20 @@ public class BoardRepositoryTest {
         System.out.println(Arrays.toString(arr));
     }
 
+    @Test
+    public void testSearch1() {
+
+        boardRepository.search1();
+    }
+
+    @Test
+    public void testSearchPage() {
+
+        Pageable pageable = PageRequest.of(0,10,Sort.by("bno").descending().and(Sort.by("title").ascending()));
+
+        //제목(t)에 1이 포함된 데이터 검색
+        Page<Object[]> result = boardRepository.searchPage("t","1",pageable);
+    }
+
 
 }
