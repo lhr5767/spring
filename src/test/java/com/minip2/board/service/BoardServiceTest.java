@@ -7,6 +7,7 @@ import com.minip2.board.dto.PageResultDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 public class BoardServiceTest {
@@ -44,5 +45,24 @@ public class BoardServiceTest {
         Long bno = 100L;
         BoardDTO boardDTO = boardService.get(bno);
         System.out.println(boardDTO);
+    }
+
+    @Test
+    public void deleteTest() {
+        Long bno = 90L;
+
+        boardService.removeWithReplies(bno);
+    }
+
+
+    @Test
+    public void modifyTest() {
+        BoardDTO boardDTO = BoardDTO.builder()
+                    .bno(4L)
+                    .title("제목 변경")
+                    .content("내용 수정")
+                    .build();
+
+        boardService.modify(boardDTO);
     }
 }

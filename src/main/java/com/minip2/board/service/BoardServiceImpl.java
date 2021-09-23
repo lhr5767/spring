@@ -6,11 +6,13 @@ import com.minip2.board.dto.PageResultDTO;
 import com.minip2.board.entity.Board;
 import com.minip2.board.entity.Member;
 import com.minip2.board.repository.BoardRepository;
+import com.minip2.board.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.function.Function;
 
@@ -20,6 +22,7 @@ import java.util.function.Function;
 public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository; //autowired 보다 이방식을 선호
+    private final ReplyRepository replyRepository;
 
     @Override
     public Long register(BoardDTO dto) {
@@ -54,5 +57,27 @@ public class BoardServiceImpl implements BoardService{
         Object[] arr = (Object[]) result;
 
         return entityToDTO((Board) arr[0],(Member) arr[1],(Long) arr[2]);
+    }
+
+    @Transactional // 해당 게시글의 댓글 삭제후 해당 게시글 삭제가 하나의 트랜잭션으로 처리되어야함함
+    @Override
+    public void removeWithReplies(Long bno) {
+
+        replyRepository.deleteByBno(bno); //댓글 삭제 먼저
+
+        boardRepository.deleteById(bno);
+
+    }
+
+    @Transactional
+    @Override
+    public void modify(BoardDTO boardDTO) {
+
+        Board board = boardRepository.getById(boardDTO.getBno());
+
+        board.changeTitle(boardDTO.getTitle());
+        board.changeContent(boardDTO.getContent());
+
+        boardRepository.save(board);
     }
 }
